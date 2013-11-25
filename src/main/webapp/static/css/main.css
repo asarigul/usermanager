@@ -1,0 +1,37 @@
+@CHARSET "UTF-8";
+
+body { background-color: #dddddd; text-align: center; margin: 0; padding: 10px; font-size: 12px; }
+body * { text-align: left; font-family: Lucida Sans Unicode; border:0;}
+#usersHeader { border-top: 2px solid silver; padding-top:10px; text-align: center; }
+fieldset { padding:0; }
+label, input { display:block; color: white; }
+label { margin-top: 5px; }
+input.text { width:95%; padding: 5px; }
+
+#container { text-align: center; }
+.error { border: 2px solid silver; width: 600px; margin: auto; font-size: 14px; }
+.error h2 { margin-top: 0; background-color: black; color: white; padding: 10px 5px; }
+.error h3 { margin-top: 0; background-color: black; color: white; padding: 10px 5px; }
+.error .message { min-height: 60px; padding-left: 80px; margin: 10px; background: url("../images/sad.png") no-repeat left top;}
+.error .message .details { font-weight: bold; font-size: 16px; margin-bottom: 10px; }
+.error ul { list-style: none; margin: 0; border-top: 1px dashed silver; border-bottom: 1px dashed silver; padding: 10px 20px;} 
+.error ul li .key { font-weight: bold; }
+
+#createTips, #updateTips { border: 1px solid transparent; padding: 2px; font-weight: bold; }
+
+.modal .icon { float: left; margin: 2px 5px 0 0; }
+.modal .info { font-style: italic; }
+#ajaxLoading p { font-size:14px; font-style: italic; font-weight: bold; text-align: center;}
+#ajaxLoading img { display: block; margin: 10px auto; }
+
+.no-close .ui-dialog-titlebar-close { display: none; }
+
+#users { display: none; border-spacing:0; border-collapse:collapse; border:1px solid black; margin: auto;}
+
+th { border-right: 1px dotted #666; min-width: 100px;}
+td { border-bottom: 1px dotted #333; }
+th, td { padding: 5px; }
+th span { margin: auto; }
+td.id, th.id { display: none; }
+td.update, td.delete { text-align: center; }
+

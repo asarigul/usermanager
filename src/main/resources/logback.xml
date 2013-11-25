@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+	<!-- enable JMX management -->
+	<jmxConfigurator />
+ 
+  	<!-- console appender -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>[%-5level] %date{HH:mm:ss.SSS}  [%logger{0}] > %msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<!-- daily rolling, last 30 days -->
+	<appender name="APPLICATION_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${APP_ROOT}/log/application/application.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>%d{yyyy-MM-dd}.log</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>[%-5level] %date{HH:mm:ss.SSS}  [%logger{0}] > %msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="SPRING_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${APP_ROOT}/log/spring/spring.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>%d{yyyy.MM.dd}.log</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>[%-5level] %date{HH:mm:ss.SSS}  [%logger] > %msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+	<!--  mongo + morphia -->
+	<appender name="DATA_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${APP_ROOT}/log/data/data.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>%d{yyyy-MM-dd}.log</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>[%-5level] %date{HH:mm:ss.SSS}  [%logger] > %msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+	<logger name="net.sarigul.usermanager" level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="APPLICATION_LOG" />
+	</logger>
+	
+	<logger name="org.springframework" level="WARN">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="SPRING_LOG" />
+	</logger>
+	
+	<logger name="com.google.code.morphia" level="WARN">
+		<appender-ref ref="DATA_LOG" />
+	</logger>
+	
+	<logger name="com.mongodb" level="WARN">
+		<appender-ref ref="DATA_LOG" />
+	</logger>
+	
+	<root level="OFF"></root>
+  
+  	<!--  
+  		this listener has to be here at the end; or logback produces a ClassCircularityError
+  		http://jira.qos.ch/browse/LOGBACK-740 
+	-->
+  	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator" />
+</configuration>
