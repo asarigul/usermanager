@@ -67,7 +67,7 @@ public class ConfigurationLoader {
 	private String getProperty(String key) {
 		String val = p.getProperty(key);
 		if(val == null || val.trim().length() == 0) {
-			return val;
+			return null;
 		}
 		return val.trim();
 	}
