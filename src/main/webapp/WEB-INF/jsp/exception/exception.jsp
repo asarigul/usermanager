@@ -21,13 +21,6 @@
 				    <li><span class="key">Status code:</span> ${requestScope['javax.servlet.error.status_code']}</li>
 				</ul>
 				<p><i>More details about this error may be found in server logs.</i></p>
-				
-				
-				<c:set var="exception" value="${requestScope['javax.servlet.error.exception']}"/>
-				<jsp:scriptlet>
-  exception.printStackTrace(new java.io.PrintWriter(out));
-</jsp:scriptlet>
-				
 			</div>
 		</div>
 	</div>
