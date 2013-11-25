@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sarigul.usermanager.core.ValidationException;
 import net.sarigul.usermanager.entity.User;
 import net.sarigul.usermanager.util.IOUtil;
 import net.sarigul.usermanager.util.JSONObject;
@@ -39,11 +40,11 @@ public abstract class AjaxController extends AbstractController {
 	
 	protected void validateRegex(String value, String regex, String error) {
 		if(value == null) {
-			throw new IllegalArgumentException(error);
+			throw new ValidationException(error);
 		}
 		
 		if(! Toolbox.checkRegex(value, regex)) {
-			throw new IllegalArgumentException(error);
+			throw new ValidationException(error);
 		}
 	}
 	
