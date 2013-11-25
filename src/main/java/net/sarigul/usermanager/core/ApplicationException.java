@@ -24,6 +24,6 @@ public class ApplicationException extends RuntimeException {
 	
 	@Override
 	public String getMessage() {
-		return "Event id: [" + this.eventId + "] " +  this.message;
+		return this.message;
 	}
 }
