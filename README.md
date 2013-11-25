@@ -6,19 +6,19 @@ A Simple user management application using Spring MVC, MongoDB, Morphia, and Mav
 Notes from the project
 ----------------------
 
-- Supports mongodb with authentication (set username & password in usermanager.properties for authentication). 
+- Supports mongodb with authentication (set both username & password in usermanager.properties to enable authentication). 
 
-- Powered by JQuery + JQueryUI at client side. All CRUD services are called  using Ajax.
+- In order to use resources efficiently, a single MongoClient (which already has a connection pool), and a single Morphia instance is created (as advised by library programmers). 
 
-- Server - Client communication protocol, including request parameter names and even validation expressions is unified at server side. In addition to preventing code duplication, server and client side validations are virtually the same. 
+- Powered by JQuery + JQueryUI at client side. Creation, update, and deletion services are invoked by Ajax.
 
-- Uses kaptcha to generate captcha (only in create form). Captcha characters, length, and case sensitivity option for validation can be set in properties file.
+- Server - Client communication protocol, including request parameter names and even regular expressions for validation are unified at server side. In addition to preventing code duplication, server and client side validations are virtually the same. 
 
-- Spring, Mongo Java Driver, and Morphia's logs' centralized by slf4j, along with application log. Logback is used as the slf4j implementation. 
+- Uses kaptcha to generate captcha images (used in user creation form). Captcha characters, length, and case sensitivity option for validation can be set in properties file.
 
-- Spring controllers are annotation driven. As an AOP practice, an aspect applied globally to all controllers, implementing a centralized error handling mechanism over controllers. 
+- Spring, Mongo Java Driver, and Morphia's logs' are centralized by slf4j, along with application log; so that all logging configuration can be managed at a single point. Logback is used as the slf4j implementation. 
 
-- In order to use resources efficiently, A single MongoClient (which already has a connection pool), and a single Morphia instance is created. 
+- Spring controllers are annotation driven. As an AOP practice, an aspect applied globally to all controllers' service methods, implementing a centralized error handling mechanism over controllers. 
 
-- Application gives an id to any exception. This information is shared with the client as the error reference. This approach could be useful when scanning log files.
+- Application gives an id to any exception. This information is shared with the client as the error reference. This approach could be useful especially when scanning thru big log files. 
 
