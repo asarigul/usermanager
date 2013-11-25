@@ -7,8 +7,7 @@ public final class Configuration {
 			MONGODB_PASSWORD_KEY = "mongodb.password",
 			CAPTCHA_CHARACTERS_KEY = "captcha.characters",
 			CAPTCHA_LENGTH_KEY = "captcha.length",
-			CAPTCHA_CASE_SENSITIVE_KEY = "captcha.caseSensitive",
-			LOG_FOLDER = "log.folder";
+			CAPTCHA_CASE_SENSITIVE_KEY = "captcha.caseSensitive";
 			
 	public static String DEFAULT_CAPTCHA_CHARACTERS = "2345679QqWwEeRrTtYyUuoPpAaSsDdFfGgHhJjKkLiZzXxCcVvbNnMm";
 	public static int DEFAULT_CAPTCHA_LENGTH = 4;
@@ -26,9 +25,6 @@ public final class Configuration {
 	private String captchaCharacters;
 	private int captchaLength;
 	private boolean caseSensitive;
-	
-	// logging
-	private String logFolder;
 	
 	public String getMongodbHost() {
 		return mongodbHost;
@@ -94,15 +90,6 @@ public final class Configuration {
 
 	public Configuration setCaseSensitive(boolean caseSensitive) {
 		this.caseSensitive = caseSensitive;
-		return this;
-	}
-
-	public String getLogFolder() {
-		return logFolder;
-	}
-
-	public Configuration setLogFolder(String logFolder) {
-		this.logFolder = logFolder;
 		return this;
 	}
 }
