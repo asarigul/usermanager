@@ -9,6 +9,7 @@ public class State {
 	}
 	
 	public State(Exception initException) {
+		this();
 		if(initException != null) {
 			this.cause = initException;
 			this.info = initException.getMessage();
