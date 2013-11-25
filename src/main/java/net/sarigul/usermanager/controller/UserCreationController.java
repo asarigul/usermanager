@@ -18,7 +18,7 @@ public class UserCreationController extends AjaxController {
 		logger.debug("handling create request");
 		
 		if(! CaptchaController.isAnswerValid(request)) {
-			throw new IllegalArgumentException("Wrong captcha!");
+			throw new ValidationException("invalid captcha");
 		}
 		
 		jsonResponse(response, true, manager.create(getRequestedUser(request)).toString());
