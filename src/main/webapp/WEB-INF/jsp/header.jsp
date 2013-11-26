@@ -11,7 +11,6 @@
 	<script src="static/js/jquery-1.9.1.js" type="text/javascript"></script>
 	<script src="static/js/jquery-ui-1.10.3.js" type="text/javascript"></script>
 	<script src="static/js/jquery.maskedinput.js" type="text/javascript"></script>
-	<script src="static/js/jquery.scrollto.js" type="text/javascript"></script>
 	
 	<script src="static/js/util.js" type="text/javascript"></script>
 	<script src="static/js/crud/c.js" type="text/javascript"></script>
