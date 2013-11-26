@@ -18,7 +18,7 @@ Notes from the project
 
 - Spring, Mongo Java Driver, and Morphia's logs' are centralized by slf4j, along with application log; so that all logging configuration can be managed at a single point. Logback is used as the slf4j implementation. 
 
-- Spring controllers are annotation driven. As an AOP practice, an aspect applied globally to all controllers' service methods, implementing a centralized error handling mechanism over controllers. 
+- As an AOP practice, an aspect applied globally to all Spring controllers' service methods, implementing a centralized error handling mechanism over controllers. This way common error cases, like validation errors, are handled at a central place. 
 
 - Application gives an id to any exception. This information is shared with the client as the error reference. This approach could be useful especially when scanning thru big log files. 
 
