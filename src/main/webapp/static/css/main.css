@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
 
 body { background-color: #dddddd; text-align: center; margin: 0; padding: 10px; font-size: 12px; }
-body * { text-align: left; font-family: Lucida Sans Unicode; border:0;}
+body * { text-align: left; font-family: Lucida Sans Unicode, Droid Sans; border:0;}
 #usersHeader { border-top: 2px solid silver; padding-top:10px; text-align: center; }
 fieldset { padding:0; }
 label, input { display:block; color: white; }

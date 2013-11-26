@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.sarigul.UserManager</groupId>
-	<artifactId>UserManager</artifactId>
+	<groupId>net.sarigul</groupId>
+	<artifactId>usermanager</artifactId>
 	<packaging>war</packaging>
 	<version>1.0</version>
 	<name>Sample User Manager</name>
@@ -174,7 +174,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>UserManager</finalName>
+		<finalName>usermanager</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
