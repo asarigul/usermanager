@@ -10,6 +10,12 @@
 		</encoder>
 	</appender>
 
+	<!-- 
+		WARNING: logging root directory is set to ${APP_ROOT}/log 
+		this means keeping your log files inside context root, which is not a good place 
+		you should change this setting for file appenders
+	 -->
+
 	<!-- daily rolling, last 30 days -->
 	<appender name="APPLICATION_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${APP_ROOT}/log/application/application.log</file>
