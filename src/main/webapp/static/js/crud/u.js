@@ -75,7 +75,7 @@ $(function() {
 		 								}
 		 							});
 		 						} else {
-		 							processError("Cannot Create User", resp[RESPONSE_INFO_KEY]);
+		 							processError("Cannot Update User", resp[RESPONSE_INFO_KEY]);
 		 						}
 		 					}
 		 				);

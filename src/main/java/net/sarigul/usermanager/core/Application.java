@@ -22,21 +22,21 @@ public class Application implements ServletContextListener  {
 	private static Logger logger;
 	
 	public void contextInitialized(ServletContextEvent contextEvent) {
-		Exception initException = null;
+		ApplicationException initException = null;
 		try {
 			initConfiguration(contextEvent.getServletContext().getRealPath("/"));
 		} catch (ConfigurationException e) {
 			initException = e;
 			logger.error("configuration error: {}", e.getMessage());
 		} catch (Exception e) {
-			initException = e; 
+			initException = new UnhandledException("unhandled exception:", e); 
 			logger.error("unhandled exception", e);
 		} finally {
 			state = new State(initException);
 		}
 	}
 	
-	public static void initConfiguration(String logRootPath) {
+	public static void initConfiguration(String logRootPath) throws ConfigurationException {
 		if(logger == null) {
 			initLogger(logRootPath);
 		}

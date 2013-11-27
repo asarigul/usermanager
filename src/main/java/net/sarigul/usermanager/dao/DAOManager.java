@@ -6,7 +6,6 @@ import net.sarigul.usermanager.config.Configuration;
 import net.sarigul.usermanager.config.ConfigurationException;
 import net.sarigul.usermanager.core.Application;
 import net.sarigul.usermanager.core.HostUnknownException;
-import net.sarigul.usermanager.core.IndexViolationException;
 import net.sarigul.usermanager.core.MongoNetworkException;
 import net.sarigul.usermanager.entity.User;
 
@@ -26,7 +25,7 @@ public final class DAOManager {
 	
 	private static DAOManager instance;
 	
-	private DAOManager()  {
+	private DAOManager() throws HostUnknownException  {
 		logger = LoggerFactory.getLogger(getClass());
 		morphia = new Morphia().map(User.class);
 		try {
@@ -36,7 +35,7 @@ public final class DAOManager {
 		}
 	}
 	
-	public synchronized static DAOManager instance() {
+	public synchronized static DAOManager instance() throws HostUnknownException {
 		if(instance == null) {
 			instance = new DAOManager();
 		}
@@ -56,7 +55,7 @@ public final class DAOManager {
 	}
 	
 	// TODO a thread always gets the same dao 
-	public UserDAO getUserDAO() {
+	public UserDAO getUserDAO() throws ConfigurationException, MongoNetworkException {
 		logger.debug("creating a dao object");
 		
 		
@@ -76,9 +75,7 @@ public final class DAOManager {
 			dao.ensureIndexes();
 		} catch(MongoException.Network e) {
 			throw new MongoNetworkException("Cannot connect to database", e);
-		} catch(MongoException.DuplicateKey e) {
-			throw new IndexViolationException("Another user with the same data exists", e);
-		}
+		} 
 		
 		return dao;
 	}

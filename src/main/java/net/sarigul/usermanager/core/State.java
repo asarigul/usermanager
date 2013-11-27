@@ -1,30 +1,15 @@
 package net.sarigul.usermanager.core;
 
 public class State {
-	private String info;
-	private Exception cause;
+	private ApplicationException cause;
 	
-	public State() {
-		this.info = "User Manager is up";
-	}
-	
-	public State(Exception initException) {
-		this();
+	public State(ApplicationException initException) {
 		if(initException != null) {
 			this.cause = initException;
-			this.info = initException.getMessage();
 		}
 	}
 
-	public String getInfo() {
-		return info;
-	}
-
-	public void setInfo(String info) {
-		this.info = info;
-	}
-
-	public Exception cause() {
+	public ApplicationException cause() {
 		return cause;
 	}
 	

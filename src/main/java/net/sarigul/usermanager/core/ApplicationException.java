@@ -3,7 +3,7 @@ package net.sarigul.usermanager.core;
 import net.sarigul.usermanager.util.Toolbox;
 
 
-public class ApplicationException extends RuntimeException {
+public class ApplicationException extends Exception {
 	private static final long serialVersionUID = 3080797957050113711L;
 	private final String eventId, message;
 	

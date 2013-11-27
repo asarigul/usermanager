@@ -1,22 +1,21 @@
 package net.sarigul.usermanager.controller;
 
-import java.net.UnknownHostException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sarigul.usermanager.core.Application;
+import net.sarigul.usermanager.core.ApplicationException;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class MainController extends AbstractController {
+public class MainController extends UserController {
 
 	@Override
 	@RequestMapping("/")
-	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws UnknownHostException {
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws ApplicationException {
 		logger.debug("handling main page request");
 				
 		return new ModelAndView("main")
@@ -42,7 +41,7 @@ public class MainController extends AbstractController {
 			.addObject("RESPONSE_INFO_KEY", RESPONSE_INFO_KEY)
 			
 			// data
-			.addObject("userCount", manager.count())
-			.addObject("users", manager.allUsers());
+			.addObject("userCount", userService().count())
+			.addObject("users", userService().allUsers());
 	}
 }

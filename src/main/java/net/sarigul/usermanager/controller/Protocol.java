@@ -29,23 +29,19 @@ public interface Protocol {
 	String 	ALLOWED_LETTERS = "a-zA-ZçÇıİğĞşŞöÖüÜ";
 			
 	String	REGEX_OBJECT_ID = "^[0-9a-fA-F]{24}$",
-			
 			REGEX_FIRSTNAME = "^([" + ALLOWED_LETTERS + "]){" + 
 				FIRSTNAME_MIN_LENGTH + "," + FIRSTNAME_MAX_LENGTH + "}$",
-				
 			REGEX_LASTNAME = "^([" + ALLOWED_LETTERS + "]){" + 
 				LASTNAME_MIN_LENGTH + "," + LASTNAME_MAX_LENGTH + "}$",
-				
 			REGEX_PHONE_NUMBER = "^([0-9]){" + PHONE_NUMBER_LENGTH + "}$";
 	
 	String 	OBJECT_ID_VALIDATION_ERROR = "Invalid object id. Expected 24 characters Hex value.",
-	
+			NO_SUCH_USER = "No such user found",
 			FIRSTNAME_VALIDATION_ERROR = "First name can only contain letters, and be " + 
 				FIRSTNAME_MIN_LENGTH + " - " + FIRSTNAME_MAX_LENGTH + " in length.",
-				
 			LASTNAME_VALIDATION_ERROR = "Last name can only contain letters, and be " + 
 				LASTNAME_MIN_LENGTH + " - " + LASTNAME_MAX_LENGTH + " in length.",
-				
-			PHONENUMBER_VALIDATION_ERROR = "A phone number must consist of " + PHONE_NUMBER_LENGTH + " digits.";	
-	
+			PHONENUMBER_VALIDATION_ERROR = "A phone number must consist of " + PHONE_NUMBER_LENGTH + " digits.",
+			NOTHING_TO_UPDATE = "No such user found",
+			DUPLICATE_USER = "Another user with the same data already exists";	
 }

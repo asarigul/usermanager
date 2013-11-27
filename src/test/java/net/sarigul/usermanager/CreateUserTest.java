@@ -1,81 +1,118 @@
 package net.sarigul.usermanager;
 
+import net.sarigul.usermanager.config.ConfigurationException;
+import net.sarigul.usermanager.core.ApplicationException;
+import net.sarigul.usermanager.core.IndexViolationException;
+import net.sarigul.usermanager.core.ValidationException;
 import net.sarigul.usermanager.entity.User;
-import net.sarigul.usermanager.util.Toolbox;
 
-import org.bson.types.ObjectId;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.mongodb.MongoException;
-
-public class CreateUserTest extends AbstractTest {
+public class CreateUserTest extends UserTest {
 	
 	@BeforeClass
-	public static void init() {
-		AbstractTest.init();
+	public static void init() throws ConfigurationException {
+		UserTest.init();
 	}
 	
 	@Test
-	public void createUnsetUser() throws Exception {
-		User unsetUser = new User().setFirstName(Toolbox.randomString(5));
+	public void invalidFirstName() throws ApplicationException {
 		try {
-			create(unsetUser);
+			userService().create(null, validLastName(), validPhoneNumberStr());
 			Assert.fail();
-		} catch(Exception e) {
-			unsetUser.setLastName(Toolbox.randomString(5));
+		} catch (ValidationException e) {
 			try {
-				create(unsetUser);
+				userService().create(tooShortFirstName(), validLastName(), validPhoneNumberStr());
 				Assert.fail();
-			} catch(Exception ex) {
-				unsetUser.setPhoneNumber(Toolbox.randomLong(10));
+			} catch(ValidationException ex) {
 				try {
-					create(unsetUser);
-					// OK
-				} catch(Exception exx) {
+					userService().create(tooLongFirstName(), validLastName(), validPhoneNumberStr());
 					Assert.fail();
-				} finally {
-					delete(unsetUser);
+				} catch(ValidationException exx) {
+					// OK
 				}
 			}
-		} 
+		}
 	}
 	
+	
 	@Test
-	public void createUser() throws Exception {
-		User user = new User().setFirstName(Toolbox.randomString(5)).
-				setLastName(Toolbox.randomString(5)).setPhoneNumber(Toolbox.randomLong(10));
-		Object id = null; 
+	public void invalidLastName() throws ApplicationException {
+		String validFirstName = validFirstName(), validPhoneNumber = validPhoneNumberStr();
+		
 		try {
-			id = create(user);
-			user.setId(new ObjectId(id.toString()));
+			userService().create(validFirstName, null, validPhoneNumber);
+			Assert.fail();
+		} catch (ValidationException e) {
+			try {
+				userService().create(validFirstName, tooShortLastName(), validPhoneNumber);
+				Assert.fail();
+			} catch(ValidationException ex) {
+				try {
+					userService().create(validFirstName, tooLongLastName(), validPhoneNumber);
+					Assert.fail();
+				} catch(ValidationException exx) {
+					// OK
+				}
+			}
+		}
+	}
+
+	@Test
+	public void invalidPhoneNumber() throws ApplicationException {
+		String validFirstName = validFirstName(), validLastName = validLastName();
+		
+		try {
+			userService().create(validFirstName, validLastName, null);
+			Assert.fail();
+		} catch (ValidationException e) {
+			try {
+				userService().create(validFirstName, validLastName, tooShortPhoneNumber());
+				Assert.fail();
+			} catch(ValidationException ex) {
+				try {
+					userService().create(validFirstName, validLastName, tooLongPhoneNumber());
+					Assert.fail();
+				} catch(ValidationException exx) {
+					try {
+						userService().create(validFirstName, validLastName, phoneNumberWithLetters());
+						Assert.fail();
+					} catch(ValidationException exxx) {
+						// OK
+					}
+				}
+			}
+		}
+	}
+	
+	public void validUser() throws Exception {
+		User user = null;
+		try {
+			user = userService().create(validFirstName(), validLastName(), validPhoneNumberStr());
+			if(user == null) {
+				Assert.fail();
+			}
+		} catch(Exception ex) {
+			Assert.fail();
 		} finally {
-			delete(user);
+			if(user != null) {
+				userService().delete(user.getId().toString());
+			}
 		}
 	}
 	
 	@Test
 	public void violateIndex() throws Exception {
-		User existing = new User()
-							.setFirstName(randomName())
-							.setLastName(randomName())
-							.setPhoneNumber(randomLong());
-		
+		User first = userService().create(validFirstName(), validLastName(), validPhoneNumberStr());
 		try {
-			create(existing);
-			User same = new User()
-								.setFirstName(existing.getFirstName())
-								.setLastName(existing.getLastName())
-								.setPhoneNumber(existing.getPhoneNumber());
-			try {
-				create(same);
-				Assert.fail();
-			} catch(MongoException.DuplicateKey ex) {
-				// OK
-			} 
+			userService().create(first.getFirstName(), first.getLastName(), first.getPhoneNumber() + "");
+			Assert.fail();
+		} catch(IndexViolationException e) {
+			// OK
 		} finally {
-			delete(existing);
+			userService().delete(first.getId().toString());
 		}
 	}
 }

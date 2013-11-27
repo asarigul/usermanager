@@ -1,12 +1,13 @@
 package net.sarigul.usermanager.entity;
 
+import net.sarigul.usermanager.util.Toolbox;
+
 import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Index;
 import com.google.code.morphia.annotations.Indexes;
-import com.google.code.morphia.annotations.PrePersist;
 
 @Entity
 @Indexes(@Index(name="uniqueUserIndex", unique= true, value="firstName, lastName, phoneNumber"))
@@ -52,14 +53,6 @@ public class User {
 		return this;
 	}
 	
-	@PrePersist
-	private void prePersist() {
-		// all required 
-		if(firstName == null || lastName == null || phoneNumber == null) {
-			throw new NullPointerException();
-		}
-	}
-
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + " [id=" + id + ", name=" + firstName + ", phoneNumber=" + phoneNumber + "]";
@@ -72,15 +65,8 @@ public class User {
 		}
 		User otherUser = (User) other;
 		
-		return equals(this.firstName, otherUser.firstName) &&
-				equals(this.lastName, otherUser.lastName) &&
-				equals(this.phoneNumber, otherUser.phoneNumber);
-	}
-	
-	public <T> boolean equals(T a, T b) {
-		if(a == null) {
-			return b == null;
-		}
-		return a.equals(b);
+		return 	Toolbox.equals(this.firstName, otherUser.firstName) &&
+				Toolbox.equals(this.lastName, otherUser.lastName) &&
+				Toolbox.equals(this.phoneNumber, otherUser.phoneNumber);
 	}
 }

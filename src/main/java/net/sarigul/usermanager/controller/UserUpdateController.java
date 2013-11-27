@@ -1,14 +1,12 @@
 package net.sarigul.usermanager.controller;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sarigul.usermanager.core.ValidationException;
+import net.sarigul.usermanager.core.ApplicationException;
+import net.sarigul.usermanager.core.InternalErrorException;
 import net.sarigul.usermanager.entity.User;
 
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,23 +16,18 @@ public class UserUpdateController extends AjaxController {
 	
 	@Override
 	@RequestMapping(value="/update")
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		User user = getRequestedUser(request);
-		if (manager.update(user)) {
-			jsonResponse(response, true, user.getId().toString());
-		} else {
-			jsonResponse(response, false, "No user updated");
-		}
-		
-		return null;
-	}
-
-	@Override
-	protected User getRequestedUser(HttpServletRequest request) {
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws ApplicationException  {
 		String id = request.getParameter(REQUEST_ID_KEY);
-		if(id == null) {
-			throw new ValidationException("User id not sent!");
-		}
-		return super.getRequestedUser(request).setId(new ObjectId(id));
+		String firstName = request.getParameter(REQUEST_FIRSTNAME_KEY);
+		String lastName = request.getParameter(REQUEST_LASTNAME_KEY);
+		String phoneNumber = request.getParameter(REQUEST_PHONENUMBER_KEY);
+		
+		User updated = userService().update(id, firstName, lastName, phoneNumber);
+		if (updated == null) {
+			throw new InternalErrorException("couldn't update user", null);
+		} 
+		
+		jsonResponse(response, updated.getId().toString());
+		return null;
 	}
 }

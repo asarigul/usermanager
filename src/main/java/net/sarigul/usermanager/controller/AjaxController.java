@@ -2,61 +2,23 @@ package net.sarigul.usermanager.controller;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sarigul.usermanager.core.ValidationException;
-import net.sarigul.usermanager.entity.User;
 import net.sarigul.usermanager.util.IOUtil;
 import net.sarigul.usermanager.util.JSONObject;
-import net.sarigul.usermanager.util.Toolbox;
 
-public abstract class AjaxController extends AbstractController {
+public abstract class AjaxController extends UserController {
 
-	protected User getRequestedUser(HttpServletRequest request) {
-		String firstName = request.getParameter(REQUEST_FIRSTNAME_KEY);
-		String lastName = request.getParameter(REQUEST_LASTNAME_KEY);
-		String phoneNumber = request.getParameter(REQUEST_PHONENUMBER_KEY);
-		
-		validateFirstName(firstName);
-		validateLastName(lastName);
-		validatePhoneNumber(phoneNumber);
-		
-		return new User().setFirstName(firstName).setLastName(lastName)
-				.setPhoneNumber(Long.parseLong(phoneNumber));
-	}
 	
-	private void validateFirstName(String firstName) {
-		validateRegex(firstName, REGEX_FIRSTNAME, FIRSTNAME_VALIDATION_ERROR);
-	}
-	
-	private void validateLastName(String lastName) {
-		validateRegex(lastName, REGEX_LASTNAME, LASTNAME_VALIDATION_ERROR);
-	}
-	
-	private void validatePhoneNumber(String phoneNumber) {
-		validateRegex(phoneNumber, REGEX_PHONE_NUMBER, PHONENUMBER_VALIDATION_ERROR);
-	}
-	
-	protected void validateRegex(String value, String regex, String error) {
-		if(value == null) {
-			throw new ValidationException(error);
-		}
-		
-		if(! Toolbox.checkRegex(value, regex)) {
-			throw new ValidationException(error);
-		}
-	}
-	
-	protected void jsonResponse(HttpServletResponse response, boolean success, String info) {
-		if(success) {
-			logger.debug("successful json response. info: {}", info);
-		} else {
-			logger.warn("failed json response. info: {}", info);
-		}
+	protected void jsonResponse(HttpServletResponse response, String info) {
+//		if(success) {
+//			logger.debug("successful json response. info: {}", info);
+//		} else {
+//			logger.warn("failed json response. info: {}", info);
+//		}
 		
 		try {
-			_jsonResponse(response, success, info);
+			_jsonResponse(response, true, info);
 		} catch (IOException e) {
 			logger.error("IOException while writing JSON response", e);
 		}

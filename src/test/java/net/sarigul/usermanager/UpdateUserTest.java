@@ -1,69 +1,165 @@
 package net.sarigul.usermanager;
 
+import net.sarigul.usermanager.config.ConfigurationException;
+import net.sarigul.usermanager.core.IndexViolationException;
+import net.sarigul.usermanager.core.ValidationException;
 import net.sarigul.usermanager.entity.User;
 
-import org.bson.types.ObjectId;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.mongodb.MongoException;
-
-public class UpdateUserTest extends AbstractTest {
+public class UpdateUserTest extends UserTest {
 	
 	@BeforeClass
-	public static void init() {
-		AbstractTest.init();
+	public static void init() throws ConfigurationException {
+		UserTest.init();
 	}
 	
 	@Test
 	public void update() throws Exception {
-		User user = new User().setFirstName(randomName())
-			.setLastName(randomName()).setPhoneNumber(randomLong());
+		User user = userService().create(validFirstName(), validLastName(), validPhoneNumberStr());
 		
 		try {
-			Object id = create(user);
-			user.setId(new ObjectId(id.toString()));
-			user.setFirstName(randomName());
-			if(! update(user)) {
-				Assert.fail();
-			}
+			userService().update(user.getId().toString(), validFirstName(), user.getLastName(), user.getPhoneNumber().toString());
+			userService().update(user.getId().toString(), user.getFirstName(), validLastName(), user.getPhoneNumber().toString());
+			userService().update(user.getId().toString(), validFirstName(), user.getLastName(), validPhoneNumberStr());
 		} finally {
-			delete(user);
+			userService().delete(user.getId().toString());
 		}
 	}
 	
 	@Test
-	public void violateIndex() throws Exception {
-		User first = new User()
-						.setFirstName(randomName())
-						.setLastName(randomName())
-						.setPhoneNumber(randomLong()),
-			
-			second = new User()
-						.setFirstName(first.getFirstName())
-						.setLastName(first.getLastName())
-						.setPhoneNumber(randomLong());
-				
+	public void invalidId() throws Exception {
 		try {
-			if(create(first) != null) {
-				if(create(second) != null) {
-					second.setPhoneNumber(first.getPhoneNumber());
+			userService().update(null, validFirstName(), validLastName(), validPhoneNumberStr());
+			Assert.fail();
+		} catch(ValidationException e) {
+			try {
+				userService().update(tooShortId(), validFirstName(), validLastName(), validPhoneNumberStr());
+				Assert.fail();
+			} catch(ValidationException ex) {
+				try {
+					userService().update(tooLongId(), validFirstName(), validLastName(), validPhoneNumberStr());
+					Assert.fail();
+				} catch(ValidationException exx) {
 					try {
-						update(second);
+						userService().update(idWithNonHexLetters(), validFirstName(), validLastName(), validPhoneNumberStr());
 						Assert.fail();
-					} catch(MongoException.DuplicateKey e) {
+					} catch(ValidationException exxx) {
 						// OK
 					}
-				} else {
-					Assert.fail();
 				}
-			} else {
+			}
+		}
+	}
+	
+	@Test
+	public void invalidFirstName() throws Exception {
+		User user = userService().create(validFirstName(), validLastName(), validPhoneNumberStr());
+	
+		try {
+			userService().update(user.getId().toString(), null, user.getLastName(), user.getPhoneNumber().toString());
+			Assert.fail();
+		} catch(ValidationException e) { // OK
+			try { 
+				userService().update(user.getId().toString(), tooShortFirstName(), user.getLastName(), user.getPhoneNumber().toString());
 				Assert.fail();
+			} catch(ValidationException ex) { // OK
+				try {
+					userService().update(user.getId().toString(), tooLongFirstName(), user.getLastName(), user.getPhoneNumber().toString());
+					Assert.fail();
+				} catch(ValidationException exx) {
+					// OK
+				}
 			}
 		} finally {
-			delete(first);
-			delete(second);
+			userService().delete(user.getId().toString());
+		}
+	}
+	
+	@Test
+	public void invalidLastName() throws Exception {
+		User user = userService().create(validFirstName(), validLastName(), validPhoneNumberStr());
+	
+		try {
+			userService().update(user.getId().toString(), user.getFirstName(), null, user.getPhoneNumber().toString());
+			Assert.fail();
+		} catch(ValidationException e) { // OK
+			try { 
+				userService().update(user.getId().toString(), user.getFirstName(), tooShortLastName(), user.getPhoneNumber().toString());
+				Assert.fail();
+			} catch(ValidationException ex) { // OK
+				try {
+					userService().update(user.getId().toString(), user.getFirstName(), tooLongLastName(), user.getPhoneNumber().toString());
+					Assert.fail();
+				} catch(ValidationException exx) {
+					// OK
+				}
+			}
+		} finally {
+			userService().delete(user.getId().toString());
+		}
+	}
+	
+	@Test
+	public void invalidPhoneNumber() throws Exception {
+		User user = userService().create(validFirstName(), validLastName(), validPhoneNumberStr());
+	
+		try {
+			userService().update(user.getId().toString(), user.getFirstName(), user.getLastName(), null);
+			Assert.fail();
+		} catch(ValidationException e) { // OK
+			try { 
+				userService().update(user.getId().toString(), user.getFirstName(), user.getLastName(), tooShortPhoneNumber());
+				Assert.fail();
+			} catch(ValidationException ex) { // OK
+				try {
+					userService().update(user.getId().toString(), user.getFirstName(), user.getLastName(), tooLongPhoneNumber());
+					Assert.fail();
+				} catch(ValidationException exx) { // OK
+					try {
+						userService().update(user.getId().toString(), user.getFirstName(), user.getLastName(), phoneNumberWithLetters());
+						Assert.fail();
+					} catch(ValidationException exxx) {
+						// OK
+					}
+				}
+			}
+		} finally {
+			userService().delete(user.getId().toString());
+		}
+	}
+	
+	
+	@Test
+	public void violateIndex() throws Exception {
+		User first = userService().create(validFirstName(), validLastName(), validPhoneNumberStr());
+		// set: only firstNames are different for next test
+		User second = userService().create(validFirstName(), first.getLastName(), first.getPhoneNumber().toString());			
+		
+		try { // identical firstNames
+			userService().update(second.getId().toString(), first.getFirstName(), second.getLastName(), second.getPhoneNumber().toString());
+			Assert.fail();
+		} catch(IndexViolationException e) { // OK, set: only lastNames are different for next test
+			second = userService().update(second.getId().toString(), first.getFirstName(), validLastName(), first.getPhoneNumber().toString());
+			
+			try { // identical lastNames
+				userService().update(second.getId().toString(), second.getFirstName(), first.getLastName(), second.getPhoneNumber().toString());
+				Assert.fail();
+			} catch(IndexViolationException ex) { // OK, set: only phoneNumbers are different for next test
+				second = userService().update(second.getId().toString(), first.getFirstName(), first.getLastName(), validPhoneNumberStr());
+				
+				try { // identical phoneNumbers
+					userService().update(second.getId().toString(), second.getFirstName(), second.getLastName(), first.getPhoneNumber().toString());
+					Assert.fail();
+				} catch(IndexViolationException exx) { 
+					// OK, done
+				}
+			}
+		} finally {
+			userService().delete(first.getId().toString());
+			userService().delete(second.getId().toString());
 		}
 	}
 }

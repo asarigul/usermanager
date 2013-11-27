@@ -21,7 +21,7 @@ import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 
 @Controller
-public class CaptchaController extends AbstractController {
+public class CaptchaController extends UserController {
 	private static final Properties CAPTCHA_PROPERTIES = new Properties();
 	
 	static {
@@ -35,7 +35,7 @@ public class CaptchaController extends AbstractController {
 	
 	@Override
 	@RequestMapping("/captcha/*")
-	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws InternalErrorException {
 		logger.debug("creating captcha");
 		
 		DefaultKaptcha producer = producer();

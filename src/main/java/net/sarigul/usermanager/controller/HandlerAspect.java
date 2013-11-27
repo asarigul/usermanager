@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sarigul.usermanager.controller.errorhandler.ErrorHandlerFactory;
 import net.sarigul.usermanager.core.Application;
+import net.sarigul.usermanager.core.ApplicationException;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

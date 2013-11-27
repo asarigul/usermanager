@@ -30,7 +30,7 @@ public class ConfigurationLoader {
 		}
 	}
 	
-	public Configuration get() {
+	public Configuration get() throws ConfigurationException {
 		String mongodbHost = getProperty(Configuration.MONGODB_HOST_KEY);
 		if(mongodbHost == null) {
 			configurationError(Configuration.MONGODB_HOST_KEY, mongodbHost);
@@ -72,7 +72,7 @@ public class ConfigurationLoader {
 		return val.trim();
 	}
 	
-	private Integer getMongodbPort(String propertyValue) {
+	private Integer getMongodbPort(String propertyValue) throws ConfigurationException {
 		Integer mongodbPort = null;
 		if(propertyValue != null && propertyValue.length() > 0) {
 			propertyValue = propertyValue.trim();
@@ -87,7 +87,7 @@ public class ConfigurationLoader {
 		return mongodbPort;
 	}
 	
-	private void checkMongodbCredentials(String mongodbUsername, String mongodbPassword) {
+	private void checkMongodbCredentials(String mongodbUsername, String mongodbPassword) throws ConfigurationException {
 		if(mongodbUsername != null && mongodbPassword == null) {
 			configurationError("mongodb password is not set while username is set. " +  
 					"(both should be unset to disable authentication check)");
@@ -149,13 +149,13 @@ public class ConfigurationLoader {
 		return sensitive;
 	}
 	
-	private void configurationError(String message) {
+	private void configurationError(String message) throws ConfigurationException {
 		ConfigurationException ex = new ConfigurationException(message);
 		logger.error(ex.getMessage());
 		throw ex;
 	}
 	
-	private void configurationError(String key, String value) {
+	private void configurationError(String key, String value) throws ConfigurationException {
 		ConfigurationException ex = new ConfigurationException(key, value);
 		logger.error(ex.getMessage());
 		throw ex;
