@@ -3,6 +3,37 @@ usermanager
 
 A Simple user management application using Spring MVC, MongoDB, Morphia, and Maven.  
 
+
+How to Install?
+---------------
+
+- Edit /src/main/resources/usermanager.properties. All values are trimmed, you can use spaces around. 
+
+    - [REQUIRED] mongodb.host : mongodb server's URL
+    - [REQUIRED] mongodb.port : port to connect
+    - [OPTIONAL] mongodb.username : database username, if it requires authentication.
+    - [OPTIONAL] mongodb.password : database password, if it requires authentication
+    
+    - [OPTIONAL] captcha.characters : characters written in captcha images. 
+    				defaults to:  2345679QqWwEeRrTtYyUuoPpAaSsDdFfGgHhJjKkLiZzXxCcVvbNnMm
+    - [OPTIONAL] captcha.length : number of characters  in captcha images. 
+    				defaults to:  4
+    - [OPTIONAL] captcha.caseSensitive : should controller check users' answers case-sensitively? 
+    				accepted values are true and false.
+    				defaults to:  true
+
+
+- Edit /src/main/resources/logback.xml
+	
+	By default, a console and 3 file appenders with daily rolling are defined. Check and update parameters if required, or add your own logger settings. 
+	
+	WARNING: When application initialized, APP_ROOT system property is set to context root. File appenders in logback.xml points to a APP_ROOT / log directory. This way, you may lost your log files. Instead of this, set a different folder's full path here. Be sure it is  writable by the application.
+
+- Build the project with maven. After unit tests, usermanager.war will be assembled under target directory.
+
+- Deploy usermanager.war to your application server. 
+
+
 Notes from the project
 ----------------------
 
