@@ -18,11 +18,10 @@ import com.google.code.morphia.logging.slf4j.SLF4JLogrImplFactory;
 
 public class Application implements ServletContextListener  {
 	private static Configuration configuration;
-	private static State state;
+	private static ApplicationException initException;
 	private static Logger logger;
 	
 	public void contextInitialized(ServletContextEvent contextEvent) {
-		ApplicationException initException = null;
 		try {
 			initConfiguration(contextEvent.getServletContext().getRealPath("/"));
 		} catch (ConfigurationException e) {
@@ -31,9 +30,7 @@ public class Application implements ServletContextListener  {
 		} catch (Exception e) {
 			initException = new UnhandledException("unhandled exception:", e); 
 			logger.error("unhandled exception", e);
-		} finally {
-			state = new State(initException);
-		}
+		} 
 	}
 	
 	public static void initConfiguration(String logRootPath) throws ConfigurationException {
@@ -75,12 +72,13 @@ public class Application implements ServletContextListener  {
 	public static Configuration configuration() {
 		return configuration;
 	}
+
+	public static boolean isUp() {
+		return initException == null;
+	}
 	
-	public static State state() {
-		if(state == null) {
-			throw new IllegalStateException("application not initialized");
-		}
-		return state;
+	public static ApplicationException initException() {
+		return initException;
 	}
 	
 	public void contextDestroyed(ServletContextEvent contextEvent) {

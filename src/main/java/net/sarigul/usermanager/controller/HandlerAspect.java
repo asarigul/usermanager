@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sarigul.usermanager.controller.errorhandler.ErrorHandlerFactory;
 import net.sarigul.usermanager.core.Application;
-import net.sarigul.usermanager.core.ApplicationException;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -31,12 +30,12 @@ public class HandlerAspect {
 		Object target = joinPoint.getTarget();
 		
 		if(! (target instanceof Controller)) {
-			throw new UnsupportedOperationException("unsupported controller: " + target.getClass());
+			throw new IllegalAccessError("unsupported controller: " + target.getClass());
 		}
 		
 		try {
-			if(Application.state().isDown()) {
-				throw Application.state().cause();
+			if(! Application.isUp()) {
+				throw Application.initException();
 			}
 			
 			return (ModelAndView) joinPoint.proceed();

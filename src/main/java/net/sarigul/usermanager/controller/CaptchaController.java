@@ -25,7 +25,7 @@ public class CaptchaController extends UserController {
 	private static final Properties CAPTCHA_PROPERTIES = new Properties();
 	
 	static {
-		if(Application.state().isUp()) {
+		if(Application.initException() == null) {
 			CAPTCHA_PROPERTIES.put(Constants.KAPTCHA_TEXTPRODUCER_CHAR_STRING,
 					Application.configuration().getCaptchaCharacters());
 			CAPTCHA_PROPERTIES.put(Constants.KAPTCHA_TEXTPRODUCER_CHAR_LENGTH,
