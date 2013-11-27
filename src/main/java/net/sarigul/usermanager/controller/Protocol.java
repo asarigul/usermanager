@@ -42,6 +42,6 @@ public interface Protocol {
 			LASTNAME_VALIDATION_ERROR = "Last name can only contain letters, and be " + 
 				LASTNAME_MIN_LENGTH + " - " + LASTNAME_MAX_LENGTH + " in length.",
 			PHONENUMBER_VALIDATION_ERROR = "A phone number must consist of " + PHONE_NUMBER_LENGTH + " digits.",
-			NOTHING_TO_UPDATE = "No such user found",
+			NOTHING_TO_UPDATE = "There is nothing to update",
 			DUPLICATE_USER = "Another user with the same data already exists";	
 }
