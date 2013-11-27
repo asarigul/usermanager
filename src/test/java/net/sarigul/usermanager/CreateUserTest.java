@@ -107,7 +107,7 @@ public class CreateUserTest extends UserTest {
 	public void violateIndex() throws Exception {
 		User first = userService().create(validFirstName(), validLastName(), validPhoneNumberStr());
 		try {
-			userService().create(first.getFirstName(), first.getLastName(), first.getPhoneNumber() + "");
+			userService().create(first.getFirstName(), first.getLastName(), first.getPhoneNumber().toString());
 			Assert.fail();
 		} catch(IndexViolationException e) {
 			// OK
